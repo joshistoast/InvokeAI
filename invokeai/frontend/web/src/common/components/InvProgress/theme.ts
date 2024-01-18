@@ -19,7 +19,7 @@ export const progressTheme = defineMultiStyleConfig({
       return {
         track: {
           borderRadius: '2px',
-          bg: 'base.800',
+          bg: 'base.850',
         },
         filledTrack: {
           borderRadius: '2px',
@@ -30,28 +30,3 @@ export const progressTheme = defineMultiStyleConfig({
     }
   ),
 });
-// export const progressTheme = defineMultiStyleConfig({
-//   baseStyle: definePartsStyle(
-//     ({ theme: t, colorScheme: c, hasStripe, isIndeterminate }) => {
-//       const bgColor = `${c}.500`;
-//       const addStripe = !isIndeterminate && hasStripe;
-//       const gradient = `linear-gradient(
-//       to right,
-//       transparent 0%,
-//       ${getColorVar(t, bgColor)} 50%,
-//       transparent 100%
-//     )`;
-//       return {
-//         track: {
-//           borderRadius: '2px',
-//           bg: 'base.800',
-//         },
-//         filledTrack: {
-//           borderRadius: '2px',
-//           ...(addStripe && generateStripe("xs")),
-//           ...(isIndeterminate ? { bgImage: gradient } : { bgColor }),
-//         },
-//       };
-//     }
-//   ),
-// });

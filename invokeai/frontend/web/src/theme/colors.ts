@@ -2,7 +2,6 @@ import type { InvokeAIThemeColors } from 'theme/types';
 import { generateColorPalette } from 'theme/util/generateColorPalette';
 
 const BASE = { H: 220, S: 12 };
-// const BASE = { H: 220, S: 16 };
 const WORKING = { H: 47, S: 42 };
 const GOLD = { H: 40, S: 70 };
 const WARNING = { H: 28, S: 42 };
@@ -48,23 +47,23 @@ export const layerStyleBody = {
   color: 'base.50',
 } as const;
 export const layerStyleFirst = {
-  bg: 'base.850',
+  bg: 'base.900',
   color: 'base.50',
 } as const;
 export const layerStyleSecond = {
-  bg: 'base.800',
+  bg: 'base.900',
   color: 'base.50',
 } as const;
 export const layerStyleThird = {
-  bg: 'base.700',
+  bg: 'base.900',
   color: 'base.50',
 } as const;
 export const layerStyleNodeBody = {
-  bg: 'base.800',
+  bg: 'base.850',
   color: 'base.100',
 } as const;
 export const layerStyleNodeHeader = {
-  bg: 'base.900',
+  bg: 'base.850',
   color: 'base.100',
 } as const;
 export const layerStyleNodeFooter = {

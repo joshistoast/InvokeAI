@@ -54,7 +54,7 @@ export const GenerationSettingsAccordion = memo(() => {
       defaultIsOpen={true}
       badges={accordionBadges}
     >
-      <InvTabs variant="collapse">
+      <InvTabs isFitted>
         <InvTabList>
           <InvTab>{t('accordions.generation.modelTab')}</InvTab>
           <InvTab badges={loraTabBadges}>

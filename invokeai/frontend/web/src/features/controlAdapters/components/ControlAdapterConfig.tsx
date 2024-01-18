@@ -72,10 +72,9 @@ const ControlAdapterConfig = (props: { id: string; number: number }) => {
     <Flex
       flexDir="column"
       gap={4}
-      p={4}
-      borderRadius="base"
+      p={2}
       position="relative"
-      bg="base.750"
+      bg="base.850"
     >
       <Flex gap={2} alignItems="center" justifyContent="space-between">
         <InvControl

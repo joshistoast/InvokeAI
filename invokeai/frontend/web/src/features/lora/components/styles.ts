@@ -5,7 +5,10 @@ const { definePartsStyle } = createMultiStyleConfigHelpers(cardAnatomy.keys);
 
 export const cardVariantLora = definePartsStyle({
   container: {
-    backgroundColor: 'base.750',
+    backgroundColor: 'transparent',
+    borderColor: 'base.700',
+    borderWidth: 1,
+    borderStyle: 'solid',
     p: 4,
     gap: 2,
     borderRadius: 'base',

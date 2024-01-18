@@ -11,7 +11,7 @@ export const baseStyle = definePartsStyle(() => ({
   dialogContainer: {},
   dialog: {
     maxH: '80vh',
-    bg: 'base.800',
+    bg: 'base.850',
   },
   header: {
     fontWeight: 'semibold',

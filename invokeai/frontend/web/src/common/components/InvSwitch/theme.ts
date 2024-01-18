@@ -9,20 +9,27 @@ const { defineMultiStyleConfig, definePartsStyle } =
 
 const invokeAITrack = defineStyle((_props) => {
   return {
-    bg: 'base.600',
+    bg: 'base.800',
     p: 1,
+    border: '1px solid transparent',
     _focusVisible: {
       boxShadow: 'none',
     },
     _checked: {
-      bg: 'blue.500',
+      bg: 'blue.300',
     },
+    _hover: {
+      borderColor: 'blue.300',
+    }
   };
 });
 
 const invokeAIThumb = defineStyle((_props) => {
   return {
     bg: 'base.50',
+    _checked: {
+      bg: 'base.800'
+    }
   };
 });
 

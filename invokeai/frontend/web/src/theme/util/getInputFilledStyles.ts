@@ -8,8 +8,8 @@ export const getInputFilledStyles = (
 ): SystemStyleObject => {
   const { variant } = props;
 
-  const bg = variant === 'darkFilled' ? 'base.800' : 'base.700';
-  const bgHover = variant === 'darkFilled' ? 'base.750' : 'base.650';
+  const bg = variant === 'darkFilled' ? 'base.850' : 'base.800';
+  const bgHover = variant === 'darkFilled' ? 'blue.300' : 'base.650';
   const error = 'error.600';
   const errorHover = 'error.500';
   const fg = 'base.100';
@@ -26,7 +26,6 @@ export const getInputFilledStyles = (
     },
   };
   const _hover = {
-    bg: bgHover,
     borderColor: bgHover,
   };
   const _focusVisible = {

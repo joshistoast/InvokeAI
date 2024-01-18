@@ -10,14 +10,14 @@ const container = defineStyle(() => ({
 
 const track = defineStyle(() => {
   return {
-    bg: 'base.600',
+    bg: 'base.800',
     h: 2,
   };
 });
 
 const filledTrack = defineStyle((_props) => {
   return {
-    bg: 'base.400',
+    bg: 'base.600',
     h: 2,
   };
 });
@@ -27,15 +27,12 @@ const thumb = defineStyle((props) => {
   return {
     w: 5,
     h: 5,
-    bg: 'base.400',
-    borderColor: 'base.200',
+    bg: 'base.850',
+    borderColor: 'base.600',
     borderWidth: 3,
     _hover: {
-      transform:
-        orientation === 'vertical'
-          ? 'translateX(-50%) scale(1.15)'
-          : 'translateY(-50%) scale(1.15)',
-      transition: 'transform 0.1s',
+      borderColor: 'blue.300',
+      transition: 'all 0.1s',
       _active: {
         transform:
           orientation === 'vertical'

@@ -48,7 +48,7 @@ const getColors = (
 } => {
   const { colorScheme: c } = props;
 
-  const bgBase = 'base.400';
+  const bgBase = 'base.600';
   const bgColor = c === 'invokeYellow' ? `${c}.500` : `${c}.400`;
   const bgBaseHover = 'base.300';
   const bgColorHover = c === 'invokeYellow' ? `${c}.300` : `${c}.300`;
