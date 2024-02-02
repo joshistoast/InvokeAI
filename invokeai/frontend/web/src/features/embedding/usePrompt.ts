@@ -62,11 +62,11 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
   type WeightingDir = 'up' | 'down';
   const updateWeighting = useCallback((text: string, dir: WeightingDir): string | undefined => {
     if (!text || !dir) {
-      return text
+      return text;
     }
 
     // Extract the main content and any existing attention symbols
-    const regex = /^\(?([^()]+?)\)?([+-]*)$/
+    const regex = /^\(?([^()]+?)\)?([+-]*)$/;
     const match = text.match(regex);
 
     if (match) {
@@ -76,22 +76,22 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
       }
       let attention = 0;
       if (attentionSymbols) {
-        attention = attentionSymbols.length * (attentionSymbols.startsWith('+') ? 1 : -1)
+        attention = attentionSymbols.length * (attentionSymbols.startsWith('+') ? 1 : -1);
       }
-      const needsParens = content.includes(' ')
+      const needsParens = content.includes(' ');
 
       // adjust attention based on direction
       if (dir === 'up') {
-        attention++
+        attention++;
       } else if (dir === 'down') {
-        attention--
+        attention--;
       }
 
-      const getAttentionSymbols = (num: number) => num > 0 ? '+'.repeat(num) : '-'.repeat(-num);
+      const getAttentionSymbols = (num: number) => (num > 0 ? '+'.repeat(num) : '-'.repeat(-num));
 
       let result = content;
       if (needsParens) {
-        result = `(${result})`
+        result = `(${result})`;
       }
       if (attention !== 0) {
         result += getAttentionSymbols(attention);
@@ -102,7 +102,7 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
 
       return result;
     } else {
-      return text
+      return text;
     }
   }, []);
 
@@ -136,7 +136,7 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
           return;
         }
 
-        const dir = e.key === 'ArrowUp' ? 'up' : 'down' as WeightingDir;
+        const dir = e.key === 'ArrowUp' ? 'up' : ('down' as WeightingDir);
         const { value } = textArea;
         let { selectionStart, selectionEnd } = textArea;
 
@@ -159,7 +159,7 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
         const updatedValue = value.substring(0, selectionStart) + newText + value.substring(selectionEnd);
         flushSync(() => {
           _onChange(updatedValue);
-        })
+        });
 
         // Set the cursor position to the end of the new text
         setTimeout(() => {
