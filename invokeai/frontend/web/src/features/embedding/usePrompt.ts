@@ -60,33 +60,50 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
 
   // Increases/decreases the weighting of the text
   type WeightingDir = 'up' | 'down';
-  const updateWeighting = useCallback((text: string, dir: WeightingDir) => {
+  const updateWeighting = useCallback((text: string, dir: WeightingDir): string | undefined => {
     if (!text || !dir) {
       return text
     }
 
-    // Regex to match the format (text)+ with any number of pluses
-    const regex = /^\((.*)\)\+*$/
-    const match = text.match(regex)
+    // Extract the main content and any existing attention symbols
+    const regex = /^\(?([^()]+?)\)?([+-]*)$/
+    const match = text.match(regex);
 
-    // Common handling for both 'up' and 'down' directions
     if (match) {
-      const content = match[1]
+      const [_, content, attentionSymbols] = match;
       if (!content) {
-        return
+        return;
       }
-      const pluses = text.slice(content.length + 2)
+      let attention = 0;
+      if (attentionSymbols) {
+        attention = attentionSymbols.length * (attentionSymbols.startsWith('+') ? 1 : -1)
+      }
+      const needsParens = content.includes(' ')
 
+      // adjust attention based on direction
       if (dir === 'up') {
-        return `(${content})${pluses}+`
-      } else {
-        // Decrease weight or remove parentheses
-        return pluses.length > 1 ? `(${content})${pluses.slice(0, -1)}` : content
+        attention++
+      } else if (dir === 'down') {
+        attention--
       }
-    }
 
-    // Handling for non-matching text
-    return dir === 'up' ? `(${text})+` : text
+      const getAttentionSymbols = (num: number) => num > 0 ? '+'.repeat(num) : '-'.repeat(-num);
+
+      let result = content;
+      if (needsParens) {
+        result = `(${result})`
+      }
+      if (attention !== 0) {
+        result += getAttentionSymbols(attention);
+      }
+      if (attention === 0 && needsParens) {
+        result = result.slice(1, -1);
+      }
+
+      return result;
+    } else {
+      return text
+    }
   }, []);
 
   const onFocus = useCallback(() => {
