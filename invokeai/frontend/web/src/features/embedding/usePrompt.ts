@@ -129,6 +129,7 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
         onOpen();
         e.preventDefault();
       } else if ((e.ctrlKey || e.metaKey) && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+        // Handle keyboard shortcuts for increasing/decreasing the weighting of the selected text
         e.preventDefault();
 
         const textArea = textareaRef.current;
@@ -140,13 +141,28 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
         const { value } = textArea;
         let { selectionStart, selectionEnd } = textArea;
 
-        // if no selection, select the word at the cursor
+        // Attempt to expand the selection to include the entire text within parentheses and any attention symbols
         if (selectionStart === selectionEnd) {
-          const start = value.lastIndexOf(' ', selectionStart - 1) + 1;
-          let end = value.indexOf(' ', selectionStart);
-          end = end === -1 ? value.length : end;
-          selectionStart = start;
-          selectionEnd = end;
+          const expandStart = value.lastIndexOf('(', selectionStart);
+          let expandEnd = value.indexOf(')', selectionEnd);
+
+          // Check for attention symbols immediately after the closing parenthesis
+          if (expandStart !== -1 && expandEnd !== -1) {
+            const attentionSymbolsMatch = value.substring(expandEnd + 1).match(/^[+-]+/)
+            if (attentionSymbolsMatch) {
+              expandEnd += attentionSymbolsMatch[0].length; // include attention symbols
+            }
+
+            selectionStart = expandStart;
+            selectionEnd = expandEnd + 1; // include closing parenthesis
+          } else {
+            // if no selection, select the word at the cursor
+            const start = value.lastIndexOf(' ', selectionStart - 1) + 1;
+            let end = value.indexOf(' ', selectionStart);
+            end = end === -1 ? value.length : end;
+            selectionStart = start;
+            selectionEnd = end;
+          }
         }
 
         const newText = updateWeighting(value.slice(selectionStart, selectionEnd), dir);
