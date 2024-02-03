@@ -106,6 +106,99 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
     }
   }, []);
 
+  type ExpandSelectionArgs = {
+    content: string;
+    currentSelectionStart: number;
+    currentSelectionEnd: number;
+  }
+  type ExpandSelectionResult = {
+    selectionStart: number
+    selectionEnd: number
+  }
+  const expandSelection = useCallback(({
+    content,
+    currentSelectionStart,
+    currentSelectionEnd,
+  }: ExpandSelectionArgs): ExpandSelectionResult => {
+    let selectionStart = currentSelectionStart;
+    let selectionEnd = currentSelectionEnd;
+
+    // return start and end of nearest opening and closing parens
+    const selectParenBlock = (start: number, end: number) => {
+      let depth = 0
+      let leftParenIndex = -1
+      let rightParenIndex = -1
+
+      // Scan backwards from start to find the opening paren
+      for (let i = start; i >= 0; i--) {
+        if (content[i] === ')') {
+          depth++
+        } else if (content[i] === '(') {
+          if (depth === 0) {
+            leftParenIndex = i
+            break
+          } else {
+            depth--
+          }
+        }
+      }
+
+      // Reset depth and scan forwards from end to find the closing paren
+      depth = 0
+      for (let i = end; i < content.length; i++) {
+        if (content[i] === '(') {
+          depth++
+        } else if (content[i] === ')') {
+          if (depth === 0) {
+            rightParenIndex = i
+            break
+          } else {
+            depth--
+          }
+        }
+      }
+
+      // Check for all + or - after right paren
+      if (rightParenIndex !== -1) {
+        let i = rightParenIndex + 1
+        while (i < content.length && (content[i] === '+' || content[i] === '-')) {
+          i++
+        }
+        rightParenIndex = i
+      }
+
+      return { leftParenIndex, rightParenIndex }
+    }
+    // return start and end of word
+    const selectWord = (index: number) => {
+      const textStart = content.lastIndexOf(' ', index - 1) + 1
+      const textEnd = content.indexOf(' ', index) === -1 ? content.length : content.indexOf(' ', index)
+      return { textStart, textEnd }
+    }
+    // return true if selection is between parens
+    const isBetweenParens = (start: number, end: number) => {
+      const { leftParenIndex, rightParenIndex } = selectParenBlock(start, end)
+      return leftParenIndex !== -1 && rightParenIndex !== -1
+    }
+
+    // selection is resting cursor
+    if (selectionStart === selectionEnd) {
+      // resting cursor is within parens
+      if (isBetweenParens(selectionStart, selectionEnd)) {
+        const { leftParenIndex, rightParenIndex } = selectParenBlock(selectionStart, selectionEnd)
+        selectionStart = leftParenIndex
+        selectionEnd = rightParenIndex
+      // resting cursor is only within word
+      } else {
+        const { textStart, textEnd } = selectWord(selectionStart)
+        selectionStart = textStart
+        selectionEnd = textEnd
+      }
+    }
+
+    return { selectionStart, selectionEnd }
+  }, [])
+
   const onFocus = useCallback(() => {
     textareaRef.current?.focus();
   }, [textareaRef]);
@@ -141,29 +234,13 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
         const { value } = textArea;
         let { selectionStart, selectionEnd } = textArea;
 
-        // Attempt to expand the selection to include the entire text within parentheses and any attention symbols
-        if (selectionStart === selectionEnd) {
-          const expandStart = value.lastIndexOf('(', selectionStart);
-          let expandEnd = value.indexOf(')', selectionEnd);
-
-          // Check for attention symbols immediately after the closing parenthesis
-          if (expandStart !== -1 && expandEnd !== -1) {
-            const attentionSymbolsMatch = value.substring(expandEnd + 1).match(/^[+-]+/)
-            if (attentionSymbolsMatch) {
-              expandEnd += attentionSymbolsMatch[0].length; // include attention symbols
-            }
-
-            selectionStart = expandStart;
-            selectionEnd = expandEnd + 1; // include closing parenthesis
-          } else {
-            // if no selection, select the word at the cursor
-            const start = value.lastIndexOf(' ', selectionStart - 1) + 1;
-            let end = value.indexOf(' ', selectionStart);
-            end = end === -1 ? value.length : end;
-            selectionStart = start;
-            selectionEnd = end;
-          }
-        }
+        const expandedSelection = expandSelection({
+          content: value,
+          currentSelectionStart: selectionStart,
+          currentSelectionEnd: selectionEnd,
+        });
+        selectionStart = expandedSelection.selectionStart;
+        selectionEnd = expandedSelection.selectionEnd;
 
         const newText = updateWeighting(value.slice(selectionStart, selectionEnd), dir);
 
@@ -184,7 +261,7 @@ export const usePrompt = ({ prompt, textareaRef, onChange: _onChange }: UseInser
         }, 0);
       }
     },
-    [onOpen, textareaRef, updateWeighting, _onChange]
+    [onOpen, textareaRef, expandSelection, updateWeighting, _onChange]
   );
 
   return {
