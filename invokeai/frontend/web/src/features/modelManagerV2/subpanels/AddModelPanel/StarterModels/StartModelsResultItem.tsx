@@ -54,7 +54,7 @@ export const StarterModelsResultItem = ({ result }: Props) => {
   }, [allSources, installModel, dispatch, t]);
 
   return (
-    <Flex alignItems="center" justifyContent="space-between" w="100%" gap={3}>
+    <Flex alignItems="center" justifyContent="space-between" w="100%" gap={3} borderBottomWidth={1} py={2}>
       <Flex fontSize="sm" flexDir="column">
         <Flex gap={3}>
           <Badge h="min-content">{result.type.replace('_', ' ')}</Badge>

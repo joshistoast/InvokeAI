@@ -33,9 +33,9 @@ export const StarterModelsResults = ({ results }: StarterModelsResultsProps) => 
   }, []);
 
   return (
-    <Flex flexDir="column" gap={3} height="100%">
+    <Flex flexDir="column" gap={2} height="100%">
       <Flex justifyContent="flex-end" alignItems="center">
-        <InputGroup w={64} size="xs">
+        <InputGroup w={"100%"} size="xs">
           <Input
             placeholder={t('modelManager.search')}
             value={searchTerm}
@@ -58,9 +58,9 @@ export const StarterModelsResults = ({ results }: StarterModelsResultsProps) => 
           )}
         </InputGroup>
       </Flex>
-      <Flex height="100%" layerStyle="third" borderRadius="base" p={3}>
+      <Flex height="100%" layerStyle="second" borderRadius="base" p={1}>
         <ScrollableContent>
-          <Flex flexDir="column" gap={3}>
+          <Flex flexDir="column">
             {filteredResults.map((result) => (
               <StarterModelsResultItem key={result.source} result={result} />
             ))}

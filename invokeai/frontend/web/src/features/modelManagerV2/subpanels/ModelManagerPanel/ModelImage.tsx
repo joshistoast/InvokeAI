@@ -15,12 +15,12 @@ const ModelImage = ({ image_url }: Props) => {
       <Flex
         height={MODEL_IMAGE_THUMBNAIL_SIZE}
         minWidth={MODEL_IMAGE_THUMBNAIL_SIZE}
-        bg="base.650"
+        bg="base.700"
         borderRadius="base"
         alignItems="center"
         justifyContent="center"
       >
-        <Icon color="base.500" as={PiImage} boxSize={FALLBACK_ICON_SIZE} />
+        <Icon color="base.400" as={PiImage} boxSize={FALLBACK_ICON_SIZE} />
       </Flex>
     );
   }

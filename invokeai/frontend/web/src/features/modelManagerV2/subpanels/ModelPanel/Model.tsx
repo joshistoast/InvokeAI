@@ -93,24 +93,28 @@ export const Model = () => {
               {data.name}
             </Heading>
             <Spacer />
-            {selectedModelMode === 'view' && <ModelConvertButton modelKey={selectedModelKey} />}
-            {selectedModelMode === 'view' && <ModelEditButton />}
-            {selectedModelMode === 'edit' && (
-              <Button size="sm" onClick={handleClickCancel} leftIcon={<PiXBold />}>
-                {t('common.cancel')}
-              </Button>
+            {selectedModelMode === 'view' && (
+              <>
+                <ModelConvertButton modelKey={selectedModelKey} />
+                <ModelEditButton />
+              </>
             )}
             {selectedModelMode === 'edit' && (
-              <Button
-                size="sm"
-                colorScheme="invokeYellow"
-                leftIcon={<PiCheckBold />}
-                onClick={form.handleSubmit(onSubmit)}
-                isLoading={isSubmitting}
-                isDisabled={Boolean(Object.keys(form.formState.errors).length)}
-              >
-                {t('common.save')}
-              </Button>
+              <>
+                <Button size="sm" onClick={handleClickCancel} leftIcon={<PiXBold />}>
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  size="sm"
+                  colorScheme="invokeYellow"
+                  leftIcon={<PiCheckBold />}
+                  onClick={form.handleSubmit(onSubmit)}
+                  isLoading={isSubmitting}
+                  isDisabled={Boolean(Object.keys(form.formState.errors).length)}
+                >
+                  {t('common.save')}
+                </Button>
+              </>
             )}
           </Flex>
           {data.source && (

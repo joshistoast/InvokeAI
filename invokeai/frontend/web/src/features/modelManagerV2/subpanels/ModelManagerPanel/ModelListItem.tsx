@@ -20,8 +20,11 @@ type ModelListItemProps = {
 };
 
 const sx: SystemStyleObject = {
-  _hover: { bg: 'base.700' },
-  "&[aria-selected='true']": { bg: 'base.700' },
+  _hover: { bg: 'base.750' },
+  "&[aria-selected='true']": { bg: 'base.750' },
+  '&:not(:last-child)': {
+    borderBottomWidth: 1,
+  },
 };
 
 const ModelListItem = (props: ModelListItemProps) => {
@@ -83,7 +86,6 @@ const ModelListItem = (props: ModelListItemProps) => {
       aria-selected={isSelected}
       justifyContent="flex-start"
       p={2}
-      borderRadius="base"
       w="full"
       alignItems="center"
       gap={2}

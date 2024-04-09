@@ -23,13 +23,11 @@ export const ModelView = () => {
   }
   return (
     <Flex flexDir="column" h="full" gap={4}>
-      <Box layerStyle="second" borderRadius="base" p={4}>
+      <Box layerStyle="first">
         <Flex flexDir="column" gap={4}>
-          <Flex gap={2}>
+          <Flex gap={2} flexDirection={'column'}>
             <ModelAttrView label={t('modelManager.baseModel')} value={data.base} />
             <ModelAttrView label={t('modelManager.modelType')} value={data.type} />
-          </Flex>
-          <Flex gap={2}>
             <ModelAttrView label={t('common.format')} value={data.format} />
             <ModelAttrView label={t('modelManager.path')} value={data.path} />
           </Flex>
@@ -61,17 +59,17 @@ export const ModelView = () => {
         </Flex>
       </Box>
       {data.type === 'main' && data.base !== 'sdxl-refiner' && (
-        <Box layerStyle="second" borderRadius="base" p={4}>
+        <Box layerStyle="first">
           <MainModelDefaultSettings />
         </Box>
       )}
       {(data.type === 'controlnet' || data.type === 't2i_adapter') && (
-        <Box layerStyle="second" borderRadius="base" p={4}>
+        <Box layerStyle="first" borderTopWidth={1} pt={2}>
           <ControlNetOrT2IAdapterDefaultSettings />
         </Box>
       )}
       {(data.type === 'main' || data.type === 'lora') && (
-        <Box layerStyle="second" borderRadius="base" p={4}>
+        <Box layerStyle="first" borderTopWidth={1} pt={2}>
           <TriggerPhrases />
         </Box>
       )}

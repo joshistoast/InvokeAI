@@ -8,7 +8,7 @@ export const StarterModelsForm = () => {
   const { isLoading, data } = useGetStarterModelsQuery();
 
   return (
-    <Flex flexDir="column" height="100%" gap={3}>
+    <Flex flexDir="column" height="100%" gap={2}>
       {isLoading && <FetchingModelsLoader loadingMessage="Loading Embeddings..." />}
       {data && <StarterModelsResults results={data} />}
     </Flex>

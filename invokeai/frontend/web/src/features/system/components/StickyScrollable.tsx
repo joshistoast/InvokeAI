@@ -10,7 +10,7 @@ type StickyScrollableHeadingProps = {
 
 const StickyScrollableHeading = memo((props: StickyScrollableHeadingProps) => {
   return (
-    <Flex ps={2} pb={4} position="sticky" zIndex={1} top={0} bg="base.800" sx={props.sx}>
+    <Flex ps={0} pb={2} position="sticky" zIndex={1} top={0} bg="base.850" sx={props.sx}>
       <Heading size="sm">{props.title}</Heading>
     </Flex>
   );
@@ -22,7 +22,7 @@ type StickyScrollableContentProps = PropsWithChildren<{ sx?: SystemStyleObject }
 
 const StickyScrollableContent = memo((props: StickyScrollableContentProps) => {
   return (
-    <Flex p={4} borderRadius="base" bg="base.750" flexDir="column" gap={4} sx={props.sx}>
+    <Flex p={4} borderRadius="base" bg="base.800" flexDir="column" gap={4} sx={props.sx} overflow={'hidden'}>
       {props.children}
     </Flex>
   );
