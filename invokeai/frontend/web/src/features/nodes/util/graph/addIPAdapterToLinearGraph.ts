@@ -19,12 +19,14 @@ export const addIPAdapterToLinearGraph = async (
   graph: NonNullableGraph,
   baseNodeId: string
 ): Promise<void> => {
-  const validIPAdapters = selectValidIPAdapters(state.controlAdapters).filter(({ model, controlImage, isEnabled }) => {
-    const hasModel = Boolean(model);
-    const doesBaseMatch = model?.base === state.generation.model?.base;
-    const hasControlImage = controlImage;
-    return isEnabled && hasModel && doesBaseMatch && hasControlImage;
-  });
+  const validIPAdapters = selectValidIPAdapters(state.controlAdapters)
+    .filter(({ model, controlImage, isEnabled }) => {
+      const hasModel = Boolean(model);
+      const doesBaseMatch = model?.base === state.generation.model?.base;
+      const hasControlImage = controlImage;
+      return isEnabled && hasModel && doesBaseMatch && hasControlImage;
+    })
+    .filter((ca) => !state.regionalPrompts.present.layers.some((l) => l.ipAdapterIds.includes(ca.id)));
 
   if (validIPAdapters.length) {
     // Even though denoise_latents' ip adapter input is collection or scalar, keep it simple and always use a collect
@@ -48,7 +50,7 @@ export const addIPAdapterToLinearGraph = async (
       if (!ipAdapter.model) {
         return;
       }
-      const { id, weight, model, clipVisionModel, beginStepPct, endStepPct, controlImage } = ipAdapter;
+      const { id, weight, model, clipVisionModel, method, beginStepPct, endStepPct, controlImage } = ipAdapter;
 
       assert(controlImage, 'IP Adapter image is required');
 
@@ -57,6 +59,7 @@ export const addIPAdapterToLinearGraph = async (
         type: 'ip_adapter',
         is_intermediate: true,
         weight: weight,
+        method: method,
         ip_adapter_model: model,
         clip_vision_model: clipVisionModel,
         begin_step_percent: beginStepPct,
@@ -84,7 +87,7 @@ export const addIPAdapterToLinearGraph = async (
 };
 
 const buildIPAdapterMetadata = (ipAdapter: IPAdapterConfig): S['IPAdapterMetadataField'] => {
-  const { controlImage, beginStepPct, endStepPct, model, clipVisionModel, weight } = ipAdapter;
+  const { controlImage, beginStepPct, endStepPct, model, clipVisionModel, method, weight } = ipAdapter;
 
   assert(model, 'IP Adapter model is required');
 
@@ -102,6 +105,7 @@ const buildIPAdapterMetadata = (ipAdapter: IPAdapterConfig): S['IPAdapterMetadat
     ip_adapter_model: model,
     clip_vision_model: clipVisionModel,
     weight,
+    method,
     begin_step_percent: beginStepPct,
     end_step_percent: endStepPct,
     image,

@@ -6,6 +6,7 @@ import { deepClone } from 'common/util/deepClone';
 import { buildControlAdapter } from 'features/controlAdapters/util/buildControlAdapter';
 import { buildControlAdapterProcessor } from 'features/controlAdapters/util/buildControlAdapterProcessor';
 import { zModelIdentifierField } from 'features/nodes/types/common';
+import { maskLayerIPAdapterAdded } from 'features/regionalPrompts/store/regionalPromptsSlice';
 import { merge, uniq } from 'lodash-es';
 import type { ControlNetModelConfig, IPAdapterModelConfig, T2IAdapterModelConfig } from 'services/api/types';
 import { socketInvocationError } from 'services/events/actions';
@@ -21,6 +22,7 @@ import type {
   ControlAdapterType,
   ControlMode,
   ControlNetConfig,
+  IPMethod,
   RequiredControlAdapterProcessorNode,
   ResizeMode,
   T2IAdapterConfig,
@@ -245,6 +247,10 @@ export const controlAdaptersSlice = createSlice({
       }
       caAdapter.updateOne(state, { id, changes: { controlMode } });
     },
+    controlAdapterIPMethodChanged: (state, action: PayloadAction<{ id: string; method: IPMethod }>) => {
+      const { id, method } = action.payload;
+      caAdapter.updateOne(state, { id, changes: { method } });
+    },
     controlAdapterCLIPVisionModelChanged: (
       state,
       action: PayloadAction<{ id: string; clipVisionModel: CLIPVisionModel }>
@@ -377,6 +383,10 @@ export const controlAdaptersSlice = createSlice({
     builder.addCase(socketInvocationError, (state) => {
       state.pendingControlImages = [];
     });
+
+    builder.addCase(maskLayerIPAdapterAdded, (state, action) => {
+      caAdapter.addOne(state, buildControlAdapter(action.meta.uuid, 'ip_adapter'));
+    });
   },
 });
 
@@ -390,6 +400,7 @@ export const {
   controlAdapterIsEnabledChanged,
   controlAdapterModelChanged,
   controlAdapterCLIPVisionModelChanged,
+  controlAdapterIPMethodChanged,
   controlAdapterWeightChanged,
   controlAdapterBeginStepPctChanged,
   controlAdapterEndStepPctChanged,

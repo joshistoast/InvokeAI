@@ -69,6 +69,7 @@
         "auto": "Auto",
         "back": "Back",
         "batch": "Batch Manager",
+        "beta": "Beta",
         "cancel": "Cancel",
         "copy": "Copy",
         "copyError": "$t(gallery.copy) Error",
@@ -83,6 +84,8 @@
         "direction": "Direction",
         "ipAdapter": "IP Adapter",
         "t2iAdapter": "T2I Adapter",
+        "positivePrompt": "Positive Prompt",
+        "negativePrompt": "Negative Prompt",
         "discordLabel": "Discord",
         "dontAskMeAgain": "Don't ask me again",
         "error": "Error",
@@ -135,7 +138,9 @@
         "red": "Red",
         "green": "Green",
         "blue": "Blue",
-        "alpha": "Alpha"
+        "alpha": "Alpha",
+        "selected": "Selected",
+        "viewer": "Viewer"
     },
     "controlnet": {
         "controlAdapter_one": "Control Adapter",
@@ -213,6 +218,10 @@
         "resize": "Resize",
         "resizeSimple": "Resize (Simple)",
         "resizeMode": "Resize Mode",
+        "ipAdapterMethod": "Method",
+        "full": "Full",
+        "style": "Style Only",
+        "composition": "Composition Only",
         "safe": "Safe",
         "saveControlImage": "Save Control Image",
         "scribble": "scribble",
@@ -326,7 +335,8 @@
         "drop": "Drop",
         "dropOrUpload": "$t(gallery.drop) or Upload",
         "dropToUpload": "$t(gallery.drop) to Upload",
-        "deleteImage": "Delete Image",
+        "deleteImage_one": "Delete Image",
+        "deleteImage_other": "Delete {{count}} Images",
         "deleteImageBin": "Deleted images will be sent to your operating system's Bin.",
         "deleteImagePermanent": "Deleted images cannot be restored.",
         "download": "Download",
@@ -769,6 +779,8 @@
         "float": "Float",
         "fullyContainNodes": "Fully Contain Nodes to Select",
         "fullyContainNodesHelp": "Nodes must be fully inside the selection box to be selected",
+        "showEdgeLabels": "Show Edge Labels",
+        "showEdgeLabelsHelp": "Show labels on edges, indicating the connected nodes",
         "hideLegendNodes": "Hide Field Type Legend",
         "hideMinimapnodes": "Hide MiniMap",
         "inputMayOnlyHaveOneConnection": "Input may only have one connection",
@@ -849,6 +861,7 @@
         "version": "Version",
         "versionUnknown": " Version Unknown",
         "workflow": "Workflow",
+        "graph": "Graph",
         "workflowAuthor": "Author",
         "workflowContact": "Contact",
         "workflowDescription": "Short Description",
@@ -884,6 +897,7 @@
         "denoisingStrength": "Denoising Strength",
         "downloadImage": "Download Image",
         "general": "General",
+        "globalSettings": "Global Settings",
         "height": "Height",
         "imageFit": "Fit Initial Image To Output Size",
         "images": "Images",
@@ -1174,6 +1188,10 @@
             "heading": "Resize Mode",
             "paragraphs": ["Method to fit Control Adapter's input image size to the output generation size."]
         },
+        "ipAdapterMethod": {
+            "heading": "Method",
+            "paragraphs": ["Method by which to apply the current IP Adapter."]
+        },
         "controlNetWeight": {
             "heading": "Weight",
             "paragraphs": [
@@ -1423,6 +1441,7 @@
         "eraseBoundingBox": "Erase Bounding Box",
         "eraser": "Eraser",
         "fillBoundingBox": "Fill Bounding Box",
+        "hideBoundingBox": "Hide Bounding Box",
         "initialFitImageSize": "Fit Image Size on Drop",
         "invertBrushSizeScrollDirection": "Invert Scroll for Brush Size",
         "layer": "Layer",
@@ -1440,6 +1459,7 @@
         "saveMask": "Save $t(unifiedCanvas.mask)",
         "saveToGallery": "Save To Gallery",
         "scaledBoundingBox": "Scaled Bounding Box",
+        "showBoundingBox": "Show Bounding Box",
         "showCanvasDebugInfo": "Show Additional Canvas Info",
         "showGrid": "Show Grid",
         "showResultsOn": "Show Results (On)",
@@ -1482,9 +1502,35 @@
         "workflowName": "Workflow Name",
         "newWorkflowCreated": "New Workflow Created",
         "workflowCleared": "Workflow Cleared",
-        "workflowEditorMenu": "Workflow Editor Menu"
+        "workflowEditorMenu": "Workflow Editor Menu",
+        "loadFromGraph": "Load Workflow from Graph",
+        "convertGraph": "Convert Graph",
+        "loadWorkflow": "$t(common.load) Workflow",
+        "autoLayout": "Auto Layout"
     },
     "app": {
         "storeNotInitialized": "Store is not initialized"
+    },
+    "regionalPrompts": {
+        "deleteAll": "Delete All",
+        "addLayer": "Add Layer",
+        "moveToFront": "Move to Front",
+        "moveToBack": "Move to Back",
+        "moveForward": "Move Forward",
+        "moveBackward": "Move Backward",
+        "brushSize": "Brush Size",
+        "regionalControl": "Regional Control (ALPHA)",
+        "enableRegionalPrompts": "Enable $t(regionalPrompts.regionalPrompts)",
+        "globalMaskOpacity": "Global Mask Opacity",
+        "autoNegative": "Auto Negative",
+        "toggleVisibility": "Toggle Layer Visibility",
+        "deletePrompt": "Delete Prompt",
+        "resetRegion": "Reset Region",
+        "debugLayers": "Debug Layers",
+        "rectangle": "Rectangle",
+        "maskPreviewColor": "Mask Preview Color",
+        "addPositivePrompt": "Add $t(common.positivePrompt)",
+        "addNegativePrompt": "Add $t(common.negativePrompt)",
+        "addIPAdapter": "Add $t(common.ipAdapter)"
     }
 }

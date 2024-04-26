@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@invoke-ai/ui-library';
+import { Box, Flex, SimpleGrid, Text } from '@invoke-ai/ui-library';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useAppSelector } from 'app/store/storeHooks';
 import { ControlNetOrT2IAdapterDefaultSettings } from 'features/modelManagerV2/subpanels/ModelPanel/ControlNetOrT2IAdapterDefaultSettings/ControlNetOrT2IAdapterDefaultSettings';
@@ -25,54 +25,35 @@ export const ModelView = () => {
     <Flex flexDir="column" h="full" gap={4}>
       <Box layerStyle="first">
         <Flex flexDir="column" gap={4}>
-          <Flex gap={2} flexDirection={'column'}>
+          <Flex gap={2}>
             <ModelAttrView label={t('modelManager.baseModel')} value={data.base} />
             <ModelAttrView label={t('modelManager.modelType')} value={data.type} />
+          </Flex>
+          <Flex gap={2}>
             <ModelAttrView label={t('common.format')} value={data.format} />
             <ModelAttrView label={t('modelManager.path')} value={data.path} />
           </Flex>
 
           {data.type === 'main' && data.format === 'diffusers' && data.repo_variant && (
-            <Flex gap={2}>
-              <ModelAttrView label={t('modelManager.repoVariant')} value={data.repo_variant} />
-            </Flex>
+            <ModelAttrView label={t('modelManager.repoVariant')} value={data.repo_variant} />
           )}
-
           {data.type === 'main' && data.format === 'checkpoint' && (
             <>
-              <Flex gap={2}>
-                <ModelAttrView label={t('modelManager.pathToConfig')} value={data.config_path} />
-                <ModelAttrView label={t('modelManager.variant')} value={data.variant} />
-              </Flex>
-              <Flex gap={2}>
-                <ModelAttrView label={t('modelManager.predictionType')} value={data.prediction_type} />
-                <ModelAttrView label={t('modelManager.upcastAttention')} value={`${data.upcast_attention}`} />
-              </Flex>
+              <ModelAttrView label={t('modelManager.pathToConfig')} value={data.config_path} />
+              <ModelAttrView label={t('modelManager.predictionType')} value={data.prediction_type} />
+              <ModelAttrView label={t('modelManager.upcastAttention')} value={`${data.upcast_attention}`} />
             </>
           )}
-
           {data.type === 'ip_adapter' && data.format === 'invokeai' && (
-            <Flex gap={2}>
-              <ModelAttrView label={t('modelManager.imageEncoderModelId')} value={data.image_encoder_model_id} />
-            </Flex>
+            <ModelAttrView label={t('modelManager.imageEncoderModelId')} value={data.image_encoder_model_id} />
           )}
-        </Flex>
+        </SimpleGrid>
       </Box>
-      {data.type === 'main' && data.base !== 'sdxl-refiner' && (
-        <Box layerStyle="first">
-          <MainModelDefaultSettings />
-        </Box>
-      )}
-      {(data.type === 'controlnet' || data.type === 't2i_adapter') && (
-        <Box layerStyle="first" borderTopWidth={1} pt={2}>
-          <ControlNetOrT2IAdapterDefaultSettings />
-        </Box>
-      )}
-      {(data.type === 'main' || data.type === 'lora') && (
-        <Box layerStyle="first" borderTopWidth={1} pt={2}>
-          <TriggerPhrases />
-        </Box>
-      )}
+      <Box layerStyle="second" borderRadius="base" p={4}>
+        {data.type === 'main' && data.base !== 'sdxl-refiner' && <MainModelDefaultSettings />}
+        {(data.type === 'controlnet' || data.type === 't2i_adapter') && <ControlNetOrT2IAdapterDefaultSettings />}
+        {(data.type === 'main' || data.type === 'lora') && <TriggerPhrases />}
+      </Box>
     </Flex>
   );
 };
