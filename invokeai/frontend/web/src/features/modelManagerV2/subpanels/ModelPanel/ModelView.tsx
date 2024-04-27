@@ -45,7 +45,7 @@ export const ModelView = () => {
           )}
         </SimpleGrid>
       </Box>
-    <Box layerStyle="first" paddingBlockStart={2}>
+      <Box layerStyle="first" paddingBlockStart={2}>
         {data.type === 'main' && data.base !== 'sdxl-refiner' && <MainModelDefaultSettings />}
         {(data.type === 'controlnet' || data.type === 't2i_adapter') && <ControlNetOrT2IAdapterDefaultSettings />}
         {(data.type === 'main' || data.type === 'lora') && <TriggerPhrases />}

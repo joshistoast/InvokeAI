@@ -98,7 +98,7 @@ export const ControlSettingsAccordion: React.FC = memo(() => {
           >
             {t('common.controlNet')}
           </Button>
-          <Divider orientation='vertical' />
+          <Divider orientation="vertical" />
           <Button
             tooltip={t('controlnet.addIPAdapter')}
             leftIcon={<PiPlusBold />}
@@ -109,7 +109,7 @@ export const ControlSettingsAccordion: React.FC = memo(() => {
           >
             {t('common.ipAdapter')}
           </Button>
-          <Divider orientation='vertical' />
+          <Divider orientation="vertical" />
           <Button
             tooltip={t('controlnet.addT2IAdapter')}
             leftIcon={<PiPlusBold />}

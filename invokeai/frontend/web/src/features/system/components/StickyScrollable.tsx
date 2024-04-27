@@ -22,7 +22,7 @@ type StickyScrollableContentProps = PropsWithChildren<{ sx?: SystemStyleObject }
 
 const StickyScrollableContent = memo((props: StickyScrollableContentProps) => {
   return (
-    <Flex p={4} borderRadius="base" bg="base.800" flexDir="column" gap={4} sx={props.sx} overflow={'hidden'}>
+    <Flex p={4} borderRadius="base" bg="base.800" flexDir="column" gap={4} sx={props.sx} overflow="hidden">
       {props.children}
     </Flex>
   );

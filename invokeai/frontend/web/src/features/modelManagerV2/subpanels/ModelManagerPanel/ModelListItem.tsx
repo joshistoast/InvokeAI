@@ -9,7 +9,7 @@ import { makeToast } from 'features/system/util/makeToast';
 import type { MouseEvent } from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PiCheckBold,PiTrashSimpleBold } from 'react-icons/pi';
+import { PiCheckBold, PiTrashSimpleBold } from 'react-icons/pi';
 import { useDeleteModelsMutation } from 'services/api/endpoints/models';
 import type { AnyModelConfig } from 'services/api/types';
 
@@ -100,7 +100,7 @@ const ModelListItem = (props: ModelListItemProps) => {
               {model.name}
             </Text>
             {isSelected && (
-              <Badge colorScheme='blue' display="flex" gap={2} alignItems="center">
+              <Badge colorScheme="blue" display="flex" gap={2} alignItems="center">
                 <PiCheckBold size={12} />
                 <span>SELECTED</span>
               </Badge>

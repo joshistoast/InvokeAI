@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, IconButton, Spacer, Text } from '@invoke-ai/ui-library';
+import { Button, Flex, Heading, IconButton, Text } from '@invoke-ai/ui-library';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useAppDispatch, useAppSelector } from 'app/store/storeHooks';
 import { setSelectedModelMode } from 'features/modelManagerV2/store/modelManagerV2Slice';
@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { PiArrowLeftBold, PiCaretLeftBold, PiCheckBold, PiXBold } from 'react-icons/pi';
+import { PiArrowLeftBold, PiCheckBold, PiXBold } from 'react-icons/pi';
 import type { UpdateModelArg } from 'services/api/endpoints/models';
 import { useGetModelConfigQuery, useUpdateModelMutation } from 'services/api/endpoints/models';
 
