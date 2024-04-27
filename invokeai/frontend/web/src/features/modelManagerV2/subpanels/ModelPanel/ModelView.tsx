@@ -24,15 +24,11 @@ export const ModelView = () => {
   return (
     <Flex flexDir="column" h="full" gap={4}>
       <Box layerStyle="first">
-        <Flex flexDir="column" gap={4}>
-          <Flex gap={2}>
-            <ModelAttrView label={t('modelManager.baseModel')} value={data.base} />
-            <ModelAttrView label={t('modelManager.modelType')} value={data.type} />
-          </Flex>
-          <Flex gap={2}>
-            <ModelAttrView label={t('common.format')} value={data.format} />
-            <ModelAttrView label={t('modelManager.path')} value={data.path} />
-          </Flex>
+        <SimpleGrid flexDir="column" gap={4}>
+          <ModelAttrView label={t('modelManager.baseModel')} value={data.base} />
+          <ModelAttrView label={t('modelManager.modelType')} value={data.type} />
+          <ModelAttrView label={t('common.format')} value={data.format} />
+          <ModelAttrView label={t('modelManager.path')} value={data.path} />
 
           {data.type === 'main' && data.format === 'diffusers' && data.repo_variant && (
             <ModelAttrView label={t('modelManager.repoVariant')} value={data.repo_variant} />
@@ -49,7 +45,7 @@ export const ModelView = () => {
           )}
         </SimpleGrid>
       </Box>
-      <Box layerStyle="second" borderRadius="base" p={4}>
+    <Box layerStyle="first" paddingBlockStart={2}>
         {data.type === 'main' && data.base !== 'sdxl-refiner' && <MainModelDefaultSettings />}
         {(data.type === 'controlnet' || data.type === 't2i_adapter') && <ControlNetOrT2IAdapterDefaultSettings />}
         {(data.type === 'main' || data.type === 'lora') && <TriggerPhrases />}
