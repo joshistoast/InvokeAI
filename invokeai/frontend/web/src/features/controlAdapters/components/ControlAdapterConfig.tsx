@@ -61,7 +61,7 @@ const ControlAdapterConfig = (props: { id: string; number: number }) => {
   }
 
   return (
-    <Flex flexDir="column" gap={4} p={4} borderRadius="base" position="relative" bg="base.750">
+    <Flex flexDir="column" gap={4} p={4} borderRadius="base" position="relative" bg="base.800">
       <Flex gap={2} alignItems="center" justifyContent="space-between">
         <FormControl>
           <FormLabel flexGrow={1}>{t(`controlnet.${controlAdapterType}`, { number })}</FormLabel>

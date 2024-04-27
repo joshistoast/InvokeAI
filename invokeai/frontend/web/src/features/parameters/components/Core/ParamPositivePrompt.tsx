@@ -55,6 +55,7 @@ export const ParamPositivePrompt = memo(() => {
           onKeyDown={onKeyDown}
           variant="darkFilled"
           paddingRight={30}
+          background="base.850"
         />
         <PromptOverlayButtonWrapper>
           <AddPromptTriggerButton isOpen={isOpen} onOpen={onOpen} />

@@ -86,8 +86,8 @@ export const ControlSettingsAccordion: React.FC = memo(() => {
 
   return (
     <StandaloneAccordion label={t('accordions.control.title')} badges={badges} isOpen={isOpen} onToggle={onToggle}>
-      <Flex gap={2} p={4} flexDir="column" data-testid="control-accordion">
-        <ButtonGroup size="sm" w="full" justifyContent="space-between" variant="ghost" isAttached={false}>
+      <Flex gap={2} p={4} flexDir="column" data-testid="control-accordion" background="base.850" borderTopWidth={1}>
+        <ButtonGroup height="24px" size="sm" w="full" justifyContent="space-between" variant="ghost" isAttached={false}>
           <Button
             tooltip={t('controlnet.addControlNet')}
             leftIcon={<PiPlusBold />}
@@ -98,6 +98,7 @@ export const ControlSettingsAccordion: React.FC = memo(() => {
           >
             {t('common.controlNet')}
           </Button>
+          <Divider orientation='vertical' />
           <Button
             tooltip={t('controlnet.addIPAdapter')}
             leftIcon={<PiPlusBold />}
@@ -108,6 +109,7 @@ export const ControlSettingsAccordion: React.FC = memo(() => {
           >
             {t('common.ipAdapter')}
           </Button>
+          <Divider orientation='vertical' />
           <Button
             tooltip={t('controlnet.addT2IAdapter')}
             leftIcon={<PiPlusBold />}

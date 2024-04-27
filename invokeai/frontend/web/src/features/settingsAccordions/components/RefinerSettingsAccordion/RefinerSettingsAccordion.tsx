@@ -37,7 +37,9 @@ export const RefinerSettingsAccordion: React.FC = memo(() => {
 
   return (
     <StandaloneAccordion label={t('sdxl.refiner')} badges={badges} isOpen={isOpen} onToggle={onToggle}>
-      {isRefinerAvailable ? <RefinerSettingsAccordionContent /> : <RefinerSettingsAccordionNoRefiner />}
+      <Flex background="base.850" borderTopWidth={1}>
+        {isRefinerAvailable ? <RefinerSettingsAccordionContent /> : <RefinerSettingsAccordionNoRefiner />}
+      </Flex>
     </StandaloneAccordion>
   );
 });

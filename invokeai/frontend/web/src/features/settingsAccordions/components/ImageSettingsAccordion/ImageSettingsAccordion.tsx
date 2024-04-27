@@ -84,7 +84,7 @@ export const ImageSettingsAccordion = memo(() => {
       isOpen={isOpenAccordion}
       onToggle={onToggleAccordion}
     >
-      <Flex px={4} pt={4} w="full" h="full" flexDir="column" data-testid="image-settings-accordion">
+      <Flex px={4} pt={4} w="full" h="full" flexDir="column" data-testid="image-settings-accordion" background="base.850" borderTopWidth={1}>
         {activeTabName === 'unifiedCanvas' ? <ImageSizeCanvas /> : <ImageSizeLinear />}
         <Expander label={t('accordions.advanced.options')} isOpen={isOpenExpander} onToggle={onToggleExpander}>
           <Flex gap={4} pb={4} flexDir="column">

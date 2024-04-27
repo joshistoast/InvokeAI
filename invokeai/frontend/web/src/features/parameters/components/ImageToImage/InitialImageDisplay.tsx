@@ -41,14 +41,12 @@ const InitialImageDisplay = () => {
 
   return (
     <Flex
-      layerStyle="first"
       position="relative"
       flexDirection="column"
       height="full"
       width="full"
       alignItems="center"
       justifyContent="center"
-      borderRadius="base"
       p={2}
       gap={4}
     >

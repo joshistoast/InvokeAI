@@ -45,7 +45,6 @@ const NodeEditor = () => {
   const { t } = useTranslation();
   return (
     <Flex
-      layerStyle="first"
       position="relative"
       width="full"
       height="full"

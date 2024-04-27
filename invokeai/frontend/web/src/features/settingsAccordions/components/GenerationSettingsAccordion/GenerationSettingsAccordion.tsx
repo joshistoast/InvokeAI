@@ -53,7 +53,7 @@ export const GenerationSettingsAccordion = memo(() => {
       isOpen={isOpenAccordion}
       onToggle={onToggleAccordion}
     >
-      <Box px={4} pt={4} data-testid="generation-accordion">
+      <Box px={4} pt={4} data-testid="generation-accordion" background="base.850" borderTopWidth={1}>
         <Flex gap={4} flexDir="column">
           <Flex gap={4} alignItems="center">
             <ParamMainModelSelect />

@@ -20,7 +20,7 @@ const WorkflowField = ({ nodeId, fieldName }: Props) => {
   const { isValueChanged, onReset } = useFieldOriginalValue(nodeId, fieldName);
 
   return (
-    <Flex layerStyle="second" position="relative" borderRadius="base" w="full" p={4} gap="2" flexDir="column">
+    <Flex layerStyle="first" position="relative" borderRadius="base" w="full" p={4} gap="2" flexDir="column">
       <Flex alignItems="center">
         <FormLabel fontSize="sm">{label || fieldTemplateTitle}</FormLabel>
 

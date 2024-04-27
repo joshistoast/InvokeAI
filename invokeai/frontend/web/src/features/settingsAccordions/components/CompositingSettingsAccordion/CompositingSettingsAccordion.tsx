@@ -32,7 +32,7 @@ export const CompositingSettingsAccordion = memo(() => {
 
   return (
     <StandaloneAccordion isOpen={isOpen} onToggle={onToggle} label={t('accordions.compositing.title')}>
-      <Tabs variant="collapse">
+      <Tabs background="base.850">
         <TabList>
           <Tab>{t('accordions.compositing.coherenceTab')}</Tab>
           <Tab>{t('accordions.compositing.infillTab')}</Tab>

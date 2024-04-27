@@ -35,7 +35,7 @@ export const StarterModelsResults = ({ results }: StarterModelsResultsProps) => 
   return (
     <Flex flexDir="column" gap={2} height="100%">
       <Flex justifyContent="flex-end" alignItems="center">
-        <InputGroup w={"100%"} size="xs">
+        <InputGroup w="100%" size="xs">
           <Input
             placeholder={t('modelManager.search')}
             value={searchTerm}
