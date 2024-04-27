@@ -1,5 +1,5 @@
 import type { SystemStyleObject } from '@invoke-ai/ui-library';
-import { ConfirmationAlertDialog, Flex, IconButton, Spacer, Text, useDisclosure } from '@invoke-ai/ui-library';
+import { Badge, ConfirmationAlertDialog, Flex, IconButton, Text, useDisclosure } from '@invoke-ai/ui-library';
 import { useAppDispatch, useAppSelector } from 'app/store/storeHooks';
 import { setSelectedModelKey } from 'features/modelManagerV2/store/modelManagerV2Slice';
 import ModelBaseBadge from 'features/modelManagerV2/subpanels/ModelManagerPanel/ModelBaseBadge';
@@ -9,7 +9,7 @@ import { makeToast } from 'features/system/util/makeToast';
 import type { MouseEvent } from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PiTrashSimpleBold } from 'react-icons/pi';
+import { PiCheckBold,PiTrashSimpleBold } from 'react-icons/pi';
 import { useDeleteModelsMutation } from 'services/api/endpoints/models';
 import type { AnyModelConfig } from 'services/api/types';
 
@@ -87,7 +87,7 @@ const ModelListItem = (props: ModelListItemProps) => {
       justifyContent="flex-start"
       p={2}
       w="full"
-      alignItems="center"
+      alignItems="flex-start"
       gap={2}
       cursor="pointer"
       onClick={handleSelectModel}
@@ -95,25 +95,26 @@ const ModelListItem = (props: ModelListItemProps) => {
       <Flex gap={2} w="full" h="full" minW={0}>
         <ModelImage image_url={model.cover_image} />
         <Flex gap={1} alignItems="flex-start" flexDir="column" w="full" minW={0}>
-          <Flex gap={2} w="full" alignItems="flex-start">
+          <Flex gap={2} w="full" alignItems="flex-center" justifyContent="space-between">
             <Text fontWeight="semibold" noOfLines={1} wordBreak="break-all">
               {model.name}
             </Text>
-            <Spacer />
+            {isSelected && (
+              <Badge colorScheme='blue' display="flex" gap={2} alignItems="center">
+                <PiCheckBold size={12} />
+                <span>SELECTED</span>
+              </Badge>
+            )}
           </Flex>
-          <Text variant="subtext" noOfLines={1}>
-            {model.description || 'No Description'}
-          </Text>
-        </Flex>
-        <Flex
-          h={MODEL_IMAGE_THUMBNAIL_SIZE}
-          flexDir="column"
-          alignItems="flex-end"
-          justifyContent="space-between"
-          gap={2}
-        >
-          <ModelBaseBadge base={model.base} />
-          <ModelFormatBadge format={model.format} />
+          <Flex gap={2} paddingBlockEnd={2} alignItems="center">
+            <Flex gap={2}>
+              <ModelBaseBadge base={model.base} />
+              <ModelFormatBadge format={model.format} />
+            </Flex>
+            <Text variant="subtext" noOfLines={1}>
+              {model.description || 'No Description'}
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
       <IconButton

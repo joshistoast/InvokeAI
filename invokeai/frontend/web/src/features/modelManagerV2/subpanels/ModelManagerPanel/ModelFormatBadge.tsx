@@ -26,7 +26,7 @@ const FORMAT_COLOR_MAP: Record<AnyModelConfig['format'], string> = {
 
 const ModelFormatBadge = ({ format }: Props) => {
   return (
-    <Badge flexGrow={0} colorScheme={FORMAT_COLOR_MAP[format]} variant="subtle">
+    <Badge flexGrow={0} colorScheme={FORMAT_COLOR_MAP[format]} variant="subtle" h="min-content">
       {FORMAT_NAME_MAP[format]}
     </Badge>
   );
