@@ -184,7 +184,7 @@ const SettingsModal = ({ children, config }: SettingsModalProps) => {
 
       <Modal isOpen={isSettingsModalOpen} onClose={onSettingsModalClose} size="2xl" isCentered>
         <ModalOverlay />
-        <ModalContent maxH="80vh" h="68rem">
+        <ModalContent maxH="80vh" h="68rem" background="base.850">
           <ModalHeader bg="none">{t('common.settingsLabel')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody display="flex" flexDir="column" gap={4}>
