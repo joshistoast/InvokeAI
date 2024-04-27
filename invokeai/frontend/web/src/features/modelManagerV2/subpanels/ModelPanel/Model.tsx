@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Spacer, Text } from '@invoke-ai/ui-library';
+import { Button, Flex, Heading, IconButton, Spacer, Text } from '@invoke-ai/ui-library';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useAppDispatch, useAppSelector } from 'app/store/storeHooks';
 import { setSelectedModelMode } from 'features/modelManagerV2/store/modelManagerV2Slice';
@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { PiCheckBold, PiXBold } from 'react-icons/pi';
+import { PiArrowLeftBold, PiCaretLeftBold, PiCheckBold, PiXBold } from 'react-icons/pi';
 import type { UpdateModelArg } from 'services/api/endpoints/models';
 import { useGetModelConfigQuery, useUpdateModelMutation } from 'services/api/endpoints/models';
 
@@ -75,6 +75,10 @@ export const Model = () => {
     dispatch(setSelectedModelMode('view'));
   }, [dispatch]);
 
+  const goBack = useCallback(() => {
+    console.log('goBack');
+  }, []);
+
   if (isLoading) {
     return <Text>{t('common.loading')}</Text>;
   }
@@ -85,44 +89,55 @@ export const Model = () => {
 
   return (
     <Flex flexDir="column" gap={4}>
-      <Flex alignItems="flex-start" gap={4}>
-        <ModelImageUpload model_key={selectedModelKey} model_image={data.cover_image} />
-        <Flex flexDir="column" gap={1} flexGrow={1} minW={0}>
-          <Flex gap={2}>
+      <Flex gap={4} alignItems="flex-start" justifyContent="space-between">
+        <Flex gap={4} alignItems="flex-start">
+          <IconButton
+            icon={<PiArrowLeftBold />}
+            onClick={goBack}
+            aria-label='Go back to "Model Manager"'
+            variant="outline"
+          />
+          <Flex gap={2} flexDirection="column">
             <Heading as="h2" fontSize="lg" noOfLines={1} wordBreak="break-all">
               {data.name}
             </Heading>
-            <Spacer />
-            {selectedModelMode === 'view' && (
-              <>
-                <ModelConvertButton modelKey={selectedModelKey} />
-                <ModelEditButton />
-              </>
-            )}
-            {selectedModelMode === 'edit' && (
-              <>
-                <Button size="sm" onClick={handleClickCancel} leftIcon={<PiXBold />}>
-                  {t('common.cancel')}
-                </Button>
-                <Button
-                  size="sm"
-                  colorScheme="invokeYellow"
-                  leftIcon={<PiCheckBold />}
-                  onClick={form.handleSubmit(onSubmit)}
-                  isLoading={isSubmitting}
-                  isDisabled={Boolean(Object.keys(form.formState.errors).length)}
-                >
-                  {t('common.save')}
-                </Button>
-              </>
-            )}
+            <Text noOfLines={3}>{data.description}</Text>
           </Flex>
+        </Flex>
+        <Flex gap={2}>
+          {selectedModelMode === 'view' && (
+            <>
+              <ModelConvertButton modelKey={selectedModelKey} />
+              <ModelEditButton />
+            </>
+          )}
+          {selectedModelMode === 'edit' && (
+            <>
+              <Button size="sm" onClick={handleClickCancel} leftIcon={<PiXBold />}>
+                {t('common.cancel')}
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="invokeYellow"
+                leftIcon={<PiCheckBold />}
+                onClick={form.handleSubmit(onSubmit)}
+                isLoading={isSubmitting}
+                isDisabled={Boolean(Object.keys(form.formState.errors).length)}
+              >
+                {t('common.save')}
+              </Button>
+            </>
+          )}
+        </Flex>
+      </Flex>
+      <Flex alignItems="flex-start" gap={4}>
+        <ModelImageUpload model_key={selectedModelKey} model_image={data.cover_image} />
+        <Flex flexDir="column" gap={1} flexGrow={1} minW={0}>
           {data.source && (
             <Text variant="subtext" noOfLines={1} wordBreak="break-all">
               {t('modelManager.source')}: {data?.source}
             </Text>
           )}
-          <Text noOfLines={3}>{data.description}</Text>
         </Flex>
       </Flex>
       {selectedModelMode === 'view' ? <ModelView /> : <ModelEdit form={form} onSubmit={onSubmit} />}
