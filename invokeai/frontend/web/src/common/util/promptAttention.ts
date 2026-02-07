@@ -11,6 +11,20 @@ type AdjustmentResult = { prompt: string; selectionStart: number; selectionEnd: 
 const ATTENTION_STEP = 1.1;
 
 /**
+ * Floating point math (e.g. 1.3 * 1.1) can produce values like 1.4300000000000002.
+ * We round weights to a small number of decimals to avoid serializing long floats.
+ */
+const WEIGHT_DECIMALS = 4;
+
+function roundWeight(weight: number): number {
+  return Number(weight.toFixed(WEIGHT_DECIMALS));
+}
+
+function approxEqual(a: number, b: number, eps = 1e-3): boolean {
+  return Math.abs(a - b) < eps;
+}
+
+/**
  * Adjusts the attention of the prompt at the current cursor/selection position.
  */
 export function adjustPromptAttention(
@@ -69,9 +83,9 @@ export function adjustPromptAttention(
 
     for (const terminal of selectedTerminals) {
       if (direction === 'increment') {
-        terminal.weight *= ATTENTION_STEP;
+        terminal.weight = roundWeight(terminal.weight * ATTENTION_STEP);
       } else {
-        terminal.weight /= ATTENTION_STEP;
+        terminal.weight = roundWeight(terminal.weight / ATTENTION_STEP);
       }
     }
 
@@ -252,7 +266,9 @@ function groupTerminals(terminals: Terminal[]): ASTNode[] {
       }
 
       if (runStart < runEnd) {
-        const slice = terminals.slice(runStart, runEnd).map((t) => ({ ...t, weight: t.weight / ATTENTION_STEP }));
+        const slice = terminals
+          .slice(runStart, runEnd)
+          .map((t) => ({ ...t, weight: roundWeight(t.weight / ATTENTION_STEP) }));
         const children = groupTerminals(slice);
         const isSelection = slice.every((t) => t.isSelected);
 
@@ -295,7 +311,9 @@ function groupTerminals(terminals: Terminal[]): ASTNode[] {
       }
 
       if (runStart < runEnd) {
-        const slice = terminals.slice(runStart, runEnd).map((t) => ({ ...t, weight: t.weight * ATTENTION_STEP }));
+        const slice = terminals
+          .slice(runStart, runEnd)
+          .map((t) => ({ ...t, weight: roundWeight(t.weight * ATTENTION_STEP) }));
         const children = groupTerminals(slice);
         const isSelection = slice.every((t) => t.isSelected);
 
@@ -321,12 +339,12 @@ function groupTerminals(terminals: Terminal[]): ASTNode[] {
     }
 
     // Residual or 1.0
-    if (Math.abs(weight - 1.0) < 0.001) {
+    if (approxEqual(weight, 1.0)) {
       nodes.push(createNodeFromTerminal(t));
       i++;
     } else {
       let j = i;
-      while (j < terminals.length && Math.abs(terminals[j]!.weight - weight) < 0.001) {
+      while (j < terminals.length && approxEqual(terminals[j]!.weight, weight)) {
         j++;
       }
 
@@ -334,7 +352,7 @@ function groupTerminals(terminals: Terminal[]): ASTNode[] {
       const children = groupTerminals(groupTerminalsSlice);
       const isSelection = groupTerminalsSlice.every((t) => t.isSelected);
 
-      const weightStr = Number(weight.toFixed(4));
+      const weightStr = roundWeight(weight);
 
       if (children.length === 1) {
         const child = children[0]!;

@@ -168,4 +168,77 @@ describe('adjustPromptAttention', () => {
       expect(result.prompt.slice(result.selectionStart, result.selectionEnd)).toBe('a+');
     });
   });
+
+  describe('numeric attention regression', () => {
+    it('should not eat parentheses or explode floats when prompt contains (tag)1.x numeric weights (increment)', () => {
+      const prompt =
+        '(masterpiece)1.3, best quality, (high detail)1.2, oil painting, (sunny midday light)1.15, ' +
+        'an old stone castle standing on a hill, medieval architecture, weathered stone walls, ' +
+        '(lush rolling hills)1.1, expansive landscape, clear blue sky';
+
+      const result = adjustPromptAttention(prompt, 0, 0, 'increment');
+
+      // Should preserve numeric attention groups and not turn them into long floating-point strings
+      expect(result.prompt).toContain('(masterpiece)');
+      expect(result.prompt).toContain('(high detail)');
+      expect(result.prompt).toContain('(sunny midday light)');
+      expect(result.prompt).toContain('(lush rolling hills)');
+
+      // No "eaten parens" like "masterpiece1.3..." (missing parentheses)
+      expect(result.prompt).toMatch(/\(masterpiece\)/);
+
+      // Avoid long float artifacts like "...0000000003"
+      expect(result.prompt).not.toMatch(/\d+\.\d{6,}/);
+
+      // Keep explicit numeric weights (on groups) numeric-looking with a reasonable precision
+      expect(result.prompt).toMatch(/\(masterpiece\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(high detail\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(sunny midday light\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(lush rolling hills\)1\.\d+/);
+
+      // Should not replace existing numeric weights with +/- syntax
+      expect(result.prompt).not.toContain('(lush rolling hills)+');
+      expect(result.prompt).not.toContain('(clear blue sky)+');
+    });
+
+    it('should not eat parentheses or explode floats when prompt contains (tag)1.x numeric weights (decrement)', () => {
+      const prompt =
+        '(masterpiece)1.3, best quality, (high detail)1.2, oil painting, (sunny midday light)1.15, ' +
+        'an old stone castle standing on a hill, medieval architecture, weathered stone walls, ' +
+        '(lush rolling hills)1.1, expansive landscape, clear blue sky';
+
+      const result = adjustPromptAttention(prompt, 0, 0, 'decrement');
+
+      expect(result.prompt).toContain('(masterpiece)');
+      expect(result.prompt).toContain('(high detail)');
+      expect(result.prompt).toContain('(sunny midday light)');
+      expect(result.prompt).toContain('(lush rolling hills)');
+
+      expect(result.prompt).toMatch(/\(masterpiece\)/);
+      expect(result.prompt).not.toMatch(/\d+\.\d{6,}/);
+
+      expect(result.prompt).toMatch(/\(masterpiece\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(high detail\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(sunny midday light\)1\.\d+/);
+      expect(result.prompt).toMatch(/\(lush rolling hills\)1\.\d+/);
+
+      expect(result.prompt).not.toContain('(lush rolling hills)+');
+      expect(result.prompt).not.toContain('(clear blue sky)+');
+    });
+
+    it('should keep numeric weights stable on repeated adjustments (no float drift)', () => {
+      const prompt = '(masterpiece)1.3, (high detail)1.2';
+
+      const inc1 = adjustPromptAttention(prompt, 0, 0, 'increment').prompt;
+      const inc2 = adjustPromptAttention(inc1, 0, 0, 'increment').prompt;
+
+      // If numeric values are drifting due to float math, you typically see long tails.
+      expect(inc1).not.toMatch(/\d+\.\d{6,}/);
+      expect(inc2).not.toMatch(/\d+\.\d{6,}/);
+
+      // Also ensure we didn't drop parentheses in the process
+      expect(inc1).toMatch(/\(masterpiece\)/);
+      expect(inc2).toMatch(/\(masterpiece\)/);
+    });
+  });
 });
