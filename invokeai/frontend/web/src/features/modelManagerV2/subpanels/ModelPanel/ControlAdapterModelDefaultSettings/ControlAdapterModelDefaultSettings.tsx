@@ -4,7 +4,7 @@ import { useIsModelManagerEnabled } from 'features/modelManagerV2/hooks/useIsMod
 import { DefaultPreprocessor } from 'features/modelManagerV2/subpanels/ModelPanel/ControlAdapterModelDefaultSettings/DefaultPreprocessor';
 import type { FormField } from 'features/modelManagerV2/subpanels/ModelPanel/MainModelDefaultSettings/MainModelDefaultSettings';
 import { toast } from 'features/toast/toast';
-import { memo, useCallback, useEffect } from 'react';
+import { memo, type ReactNode, useCallback, useEffect } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -17,10 +17,11 @@ export type ControlAdapterModelDefaultSettingsFormData = {
 };
 
 type Props = {
+  headerActions?: ReactNode;
   modelConfig: ControlNetModelConfig | T2IAdapterModelConfig | ControlLoRAModelConfig;
 };
 
-export const ControlAdapterModelDefaultSettings = memo(({ modelConfig }: Props) => {
+export const ControlAdapterModelDefaultSettings = memo(({ headerActions, modelConfig }: Props) => {
   const { t } = useTranslation();
   const canManageModels = useIsModelManagerEnabled();
 
@@ -72,18 +73,21 @@ export const ControlAdapterModelDefaultSettings = memo(({ modelConfig }: Props) 
     <>
       <Flex gap="4" justifyContent="space-between" w="full" pb={4}>
         <Heading fontSize="md">{t('modelManager.defaultSettings')}</Heading>
-        {canManageModels && (
-          <Button
-            size="sm"
-            leftIcon={<PiCheckBold />}
-            colorScheme="invokeYellow"
-            isDisabled={!formState.isDirty}
-            onClick={handleSubmit(onSubmit)}
-            isLoading={isLoadingUpdateModel}
-          >
-            {t('common.save')}
-          </Button>
-        )}
+        <Flex gap={2} alignItems="center">
+          {headerActions}
+          {canManageModels && (
+            <Button
+              size="sm"
+              leftIcon={<PiCheckBold />}
+              colorScheme="invokeYellow"
+              isDisabled={!formState.isDirty}
+              onClick={handleSubmit(onSubmit)}
+              isLoading={isLoadingUpdateModel}
+            >
+              {t('common.save')}
+            </Button>
+          )}
+        </Flex>
       </Flex>
 
       <SimpleGrid columns={2} gap={8}>

@@ -8,7 +8,7 @@ import { DefaultWidth } from 'features/modelManagerV2/subpanels/ModelPanel/MainM
 import type { ParameterScheduler } from 'features/parameters/types/parameterSchemas';
 import { getOptimalDimension } from 'features/parameters/util/optimalDimension';
 import { toast } from 'features/toast/toast';
-import { memo, useCallback, useEffect, useMemo } from 'react';
+import { memo, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -42,10 +42,11 @@ export type MainModelDefaultSettingsFormData = {
 };
 
 type Props = {
+  headerActions?: ReactNode;
   modelConfig: MainModelConfig;
 };
 
-export const MainModelDefaultSettings = memo(({ modelConfig }: Props) => {
+export const MainModelDefaultSettings = memo(({ headerActions, modelConfig }: Props) => {
   const selectedModelKey = useAppSelector(selectSelectedModelKey);
   const canManageModels = useIsModelManagerEnabled();
   const { t } = useTranslation();
@@ -117,18 +118,21 @@ export const MainModelDefaultSettings = memo(({ modelConfig }: Props) => {
     <>
       <Flex gap="4" justifyContent="space-between" w="full" pb={4}>
         <Heading fontSize="md">{t('modelManager.defaultSettings')}</Heading>
-        {canManageModels && (
-          <Button
-            size="sm"
-            leftIcon={<PiCheckBold />}
-            colorScheme="invokeYellow"
-            isDisabled={!formState.isDirty}
-            onClick={handleSubmit(onSubmit)}
-            isLoading={isLoadingUpdateModel}
-          >
-            {t('common.save')}
-          </Button>
-        )}
+        <Flex gap={2} alignItems="center">
+          {headerActions}
+          {canManageModels && (
+            <Button
+              size="sm"
+              leftIcon={<PiCheckBold />}
+              colorScheme="invokeYellow"
+              isDisabled={!formState.isDirty}
+              onClick={handleSubmit(onSubmit)}
+              isLoading={isLoadingUpdateModel}
+            >
+              {t('common.save')}
+            </Button>
+          )}
+        </Flex>
       </Flex>
 
       <SimpleGrid columns={2} gap={8}>

@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   ListItem,
+  MenuItem,
   Text,
   UnorderedList,
   useDisclosure,
@@ -11,14 +12,16 @@ import {
 import { toast } from 'features/toast/toast';
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { PiArrowsClockwiseBold } from 'react-icons/pi';
 import { useConvertModelMutation } from 'services/api/endpoints/models';
 import type { CheckpointModelConfig } from 'services/api/types';
 
 interface ModelConvertProps {
+  asMenuItem?: boolean;
   modelConfig: CheckpointModelConfig;
 }
 
-export const ModelConvertButton = memo(({ modelConfig }: ModelConvertProps) => {
+export const ModelConvertButton = memo(({ asMenuItem = false, modelConfig }: ModelConvertProps) => {
   const { t } = useTranslation();
   const [convertModel, { isLoading }] = useConvertModelMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,17 +54,23 @@ export const ModelConvertButton = memo(({ modelConfig }: ModelConvertProps) => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        onClick={onOpen}
-        size="sm"
-        aria-label={t('modelManager.convertToDiffusers')}
-        className=" modal-close-btn"
-        isLoading={isLoading}
-        flexShrink={0}
-      >
-        🧨 {t('modelManager.convert')}
-      </Button>
+      {asMenuItem ? (
+        <MenuItem as="button" icon={<PiArrowsClockwiseBold />} onClick={onOpen} isDisabled={isLoading}>
+          {t('modelManager.convertToDiffusers')}
+        </MenuItem>
+      ) : (
+        <Button
+          variant="outline"
+          onClick={onOpen}
+          size="sm"
+          aria-label={t('modelManager.convertToDiffusers')}
+          className=" modal-close-btn"
+          isLoading={isLoading}
+          flexShrink={0}
+        >
+          🧨 {t('modelManager.convert')}
+        </Button>
+      )}
       <ConfirmationAlertDialog
         title={`${t('modelManager.convert')} ${modelConfig.name}`}
         acceptCallback={modelConvertHandler}

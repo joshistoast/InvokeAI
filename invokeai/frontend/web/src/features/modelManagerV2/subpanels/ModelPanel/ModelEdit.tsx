@@ -15,7 +15,7 @@ import { useAppDispatch } from 'app/store/storeHooks';
 import { setSelectedModelMode } from 'features/modelManagerV2/store/modelManagerV2Slice';
 import { ModelHeader } from 'features/modelManagerV2/subpanels/ModelPanel/ModelHeader';
 import { toast } from 'features/toast/toast';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { PiCheckBold, PiXBold } from 'react-icons/pi';
@@ -27,7 +27,9 @@ import ModelFormatSelect from './Fields/ModelFormatSelect';
 import ModelTypeSelect from './Fields/ModelTypeSelect';
 import ModelVariantSelect from './Fields/ModelVariantSelect';
 import PredictionTypeSelect from './Fields/PredictionTypeSelect';
-import { ModelFooter } from './ModelFooter';
+import { isExternalModel } from './isExternalModel';
+import { ModelMoreActions } from './ModelMoreActions';
+import { getModelPanelActionLayout } from './modelPanelActionLayout';
 
 type Props = {
   modelConfig: AnyModelConfig;
@@ -81,9 +83,20 @@ export const ModelEdit = memo(({ modelConfig }: Props) => {
     dispatch(setSelectedModelMode('view'));
   }, [dispatch]);
 
+  const actionLayout = useMemo(() => {
+    return getModelPanelActionLayout({
+      modelConfig,
+      canManageModels: true,
+      canUpdatePath: isExternalModel(modelConfig.path),
+      isEditing: true,
+      withSettings: false,
+    });
+  }, [modelConfig]);
+
   return (
     <Flex flexDir="column" gap={4}>
       <ModelHeader modelConfig={modelConfig}>
+        <ModelMoreActions actions={actionLayout.moreHeaderActions} modelConfig={modelConfig} />
         <Button flexShrink={0} size="sm" onClick={handleClickCancel} leftIcon={<PiXBold />}>
           {t('common.cancel')}
         </Button>
@@ -163,7 +176,6 @@ export const ModelEdit = memo(({ modelConfig }: Props) => {
           </Flex>
         </form>
       </Flex>
-      <ModelFooter modelConfig={modelConfig} isEditing={true} />
     </Flex>
   );
 });

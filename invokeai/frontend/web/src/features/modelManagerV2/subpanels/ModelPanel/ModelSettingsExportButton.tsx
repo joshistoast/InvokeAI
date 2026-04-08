@@ -1,4 +1,4 @@
-import { IconButton } from '@invoke-ai/ui-library';
+import { Button } from '@invoke-ai/ui-library';
 import { toast } from 'features/toast/toast';
 import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -67,14 +67,9 @@ export const ModelSettingsExportButton = memo(({ modelConfig }: Props) => {
   }, [modelConfig, t]);
 
   return (
-    <IconButton
-      size="sm"
-      icon={<PiDownloadSimpleBold />}
-      aria-label={t('modelManager.exportSettings')}
-      tooltip={t('modelManager.exportSettings')}
-      onClick={handleExport}
-      isDisabled={!hasExportableData}
-    />
+    <Button size="sm" leftIcon={<PiDownloadSimpleBold />} onClick={handleExport} isDisabled={!hasExportableData}>
+      {t('modelManager.exportSettings')}
+    </Button>
   );
 });
 

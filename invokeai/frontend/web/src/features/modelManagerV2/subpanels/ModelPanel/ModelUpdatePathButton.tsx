@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  MenuItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -25,10 +26,11 @@ import { useUpdateModelMutation } from 'services/api/endpoints/models';
 import type { AnyModelConfig } from 'services/api/types';
 
 interface Props {
+  asMenuItem?: boolean;
   modelConfig: AnyModelConfig;
 }
 
-export const ModelUpdatePathButton = memo(({ modelConfig }: Props) => {
+export const ModelUpdatePathButton = memo(({ asMenuItem = false, modelConfig }: Props) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateModel, { isLoading }] = useUpdateModelMutation();
@@ -79,16 +81,22 @@ export const ModelUpdatePathButton = memo(({ modelConfig }: Props) => {
 
   return (
     <>
-      <Button
-        onClick={handleOpen}
-        size="sm"
-        aria-label={t('modelManager.updatePathTooltip')}
-        tooltip={t('modelManager.updatePathTooltip')}
-        flexShrink={0}
-        leftIcon={<PiFolderOpenFill />}
-      >
-        {t('modelManager.updatePath')}
-      </Button>
+      {asMenuItem ? (
+        <MenuItem as="button" icon={<PiFolderOpenFill />} onClick={handleOpen}>
+          {t('modelManager.updatePath')}
+        </MenuItem>
+      ) : (
+        <Button
+          onClick={handleOpen}
+          size="sm"
+          aria-label={t('modelManager.updatePathTooltip')}
+          tooltip={t('modelManager.updatePathTooltip')}
+          flexShrink={0}
+          leftIcon={<PiFolderOpenFill />}
+        >
+          {t('modelManager.updatePath')}
+        </Button>
+      )}
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" useInert={false}>
         <ModalOverlay />
         <ModalContent>

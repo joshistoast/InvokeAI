@@ -3,7 +3,6 @@ import { useIsModelManagerEnabled } from 'features/modelManagerV2/hooks/useIsMod
 import { ControlAdapterModelDefaultSettings } from 'features/modelManagerV2/subpanels/ModelPanel/ControlAdapterModelDefaultSettings/ControlAdapterModelDefaultSettings';
 import { EncoderModelSettings } from 'features/modelManagerV2/subpanels/ModelPanel/EncoderModelSettings/EncoderModelSettings';
 import { LoRAModelDefaultSettings } from 'features/modelManagerV2/subpanels/ModelPanel/LoRAModelDefaultSettings/LoRAModelDefaultSettings';
-import { ModelConvertButton } from 'features/modelManagerV2/subpanels/ModelPanel/ModelConvertButton';
 import { ModelEditButton } from 'features/modelManagerV2/subpanels/ModelPanel/ModelEditButton';
 import { ModelHeader } from 'features/modelManagerV2/subpanels/ModelPanel/ModelHeader';
 import { ModelSettingsExportButton } from 'features/modelManagerV2/subpanels/ModelPanel/ModelSettingsExportButton';
@@ -25,9 +24,8 @@ import type {
 import { isExternalModel } from './isExternalModel';
 import { MainModelDefaultSettings } from './MainModelDefaultSettings/MainModelDefaultSettings';
 import { ModelAttrView } from './ModelAttrView';
-import { ModelDeleteButton } from './ModelDeleteButton';
-import { ModelReidentifyButton } from './ModelReidentifyButton';
-import { ModelUpdatePathButton } from './ModelUpdatePathButton';
+import { ModelMoreActions } from './ModelMoreActions';
+import { getModelPanelActionLayout } from './modelPanelActionLayout';
 import { RelatedModels } from './RelatedModels';
 
 type EncoderModelConfig =
@@ -82,18 +80,34 @@ export const ModelView = memo(({ modelConfig }: Props) => {
     return false;
   }, [modelConfig]);
 
+  const actionLayout = useMemo(() => {
+    return getModelPanelActionLayout({
+      modelConfig,
+      canManageModels,
+      canUpdatePath,
+      withSettings,
+    });
+  }, [canManageModels, canUpdatePath, modelConfig, withSettings]);
+
+  const settingsHeaderActions = actionLayout.settingsActions.length > 0 && (
+    <>
+      {actionLayout.settingsActions.includes('importSettings') && (
+        <ModelSettingsImportButton modelConfig={modelConfig} />
+      )}
+      {actionLayout.settingsActions.includes('exportSettings') && (
+        <ModelSettingsExportButton modelConfig={modelConfig} />
+      )}
+    </>
+  );
+
+  const shouldRenderStandaloneSettingsActions =
+    actionLayout.settingsActions.length > 0 && modelConfig.type === 'main' && modelConfig.base === 'sdxl-refiner';
+
   return (
     <Flex flexDir="column" gap={4} h="full">
       <ModelHeader modelConfig={modelConfig}>
-        {canManageModels && canUpdatePath && <ModelUpdatePathButton modelConfig={modelConfig} />}
-        {canManageModels && <ModelReidentifyButton modelConfig={modelConfig} />}
-        {canManageModels && modelConfig.format === 'checkpoint' && modelConfig.type === 'main' && (
-          <ModelConvertButton modelConfig={modelConfig} />
-        )}
-        {withSettings && <ModelSettingsImportButton modelConfig={modelConfig} />}
-        {withSettings && <ModelSettingsExportButton modelConfig={modelConfig} />}
-        {canManageModels && <ModelEditButton />}
-        {canManageModels && <ModelDeleteButton modelConfig={modelConfig} />}
+        <ModelMoreActions actions={actionLayout.moreHeaderActions} modelConfig={modelConfig} />
+        {actionLayout.primaryHeaderActions.includes('edit') && <ModelEditButton />}
       </ModelHeader>
       <Divider />
       <Flex flexDir="column" gap={4}>
@@ -125,22 +139,29 @@ export const ModelView = memo(({ modelConfig }: Props) => {
           <>
             <Divider />
             <Box>
+              {shouldRenderStandaloneSettingsActions && (
+                <Flex justifyContent="flex-end" gap={2} mb={4}>
+                  {settingsHeaderActions}
+                </Flex>
+              )}
               {modelConfig.type === 'main' && modelConfig.base !== 'sdxl-refiner' && (
-                <MainModelDefaultSettings modelConfig={modelConfig} />
+                <MainModelDefaultSettings headerActions={settingsHeaderActions} modelConfig={modelConfig} />
               )}
               {(modelConfig.type === 'controlnet' ||
                 modelConfig.type === 't2i_adapter' ||
                 modelConfig.type === 'control_lora') && (
-                <ControlAdapterModelDefaultSettings modelConfig={modelConfig} />
+                <ControlAdapterModelDefaultSettings headerActions={settingsHeaderActions} modelConfig={modelConfig} />
               )}
               {modelConfig.type === 'lora' && (
                 <>
-                  <LoRAModelDefaultSettings modelConfig={modelConfig} />
+                  <LoRAModelDefaultSettings headerActions={settingsHeaderActions} modelConfig={modelConfig} />
                   <TriggerPhrases modelConfig={modelConfig} />
                 </>
               )}
               {modelConfig.type === 'main' && <TriggerPhrases modelConfig={modelConfig} />}
-              {isEncoderModel(modelConfig) && <EncoderModelSettings modelConfig={modelConfig} />}
+              {isEncoderModel(modelConfig) && (
+                <EncoderModelSettings headerActions={settingsHeaderActions} modelConfig={modelConfig} />
+              )}
             </Box>
           </>
         )}

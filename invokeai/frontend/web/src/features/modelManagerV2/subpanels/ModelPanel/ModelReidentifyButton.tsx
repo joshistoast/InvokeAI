@@ -1,4 +1,4 @@
-import { Button } from '@invoke-ai/ui-library';
+import { Button, MenuItem } from '@invoke-ai/ui-library';
 import { toast } from 'features/toast/toast';
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +7,11 @@ import { useReidentifyModelMutation } from 'services/api/endpoints/models';
 import type { AnyModelConfig } from 'services/api/types';
 
 interface Props {
+  asMenuItem?: boolean;
   modelConfig: AnyModelConfig;
 }
 
-export const ModelReidentifyButton = memo(({ modelConfig }: Props) => {
+export const ModelReidentifyButton = memo(({ asMenuItem = false, modelConfig }: Props) => {
   const { t } = useTranslation();
   const [reidentifyModel, { isLoading }] = useReidentifyModelMutation();
 
@@ -40,7 +41,11 @@ export const ModelReidentifyButton = memo(({ modelConfig }: Props) => {
       });
   }, [modelConfig.key, reidentifyModel, t]);
 
-  return (
+  return asMenuItem ? (
+    <MenuItem as="button" icon={<PiSparkleFill />} onClick={onClick} isDisabled={isLoading}>
+      {t('modelManager.reidentify')}
+    </MenuItem>
+  ) : (
     <Button
       onClick={onClick}
       size="sm"

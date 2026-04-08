@@ -1,4 +1,4 @@
-import { IconButton } from '@invoke-ai/ui-library';
+import { Button } from '@invoke-ai/ui-library';
 import { toast } from 'features/toast/toast';
 import type { ChangeEvent } from 'react';
 import { memo, useCallback, useRef } from 'react';
@@ -157,13 +157,9 @@ export const ModelSettingsImportButton = memo(({ modelConfig }: Props) => {
 
   return (
     <>
-      <IconButton
-        size="sm"
-        icon={<PiUploadSimpleBold />}
-        aria-label={t('modelManager.importSettings')}
-        tooltip={t('modelManager.importSettings')}
-        onClick={handleClick}
-      />
+      <Button size="sm" leftIcon={<PiUploadSimpleBold />} onClick={handleClick}>
+        {t('modelManager.importSettings')}
+      </Button>
       <input ref={fileInputRef} type="file" accept=".json" onChange={handleFileChange} style={{ display: 'none' }} />
     </>
   );

@@ -5,8 +5,7 @@ import { useEncoderModelSettings } from 'features/modelManagerV2/hooks/useEncode
 import { selectSelectedModelKey } from 'features/modelManagerV2/store/modelManagerV2Slice';
 import type { FormField } from 'features/modelManagerV2/subpanels/ModelPanel/MainModelDefaultSettings/MainModelDefaultSettings';
 import { toast } from 'features/toast/toast';
-import type { ChangeEvent } from 'react';
-import { memo, useCallback, useEffect, useMemo } from 'react';
+import { type ChangeEvent, memo, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import type { Control, SubmitHandler } from 'react-hook-form';
 import { useController, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +33,7 @@ type EncoderModelConfig =
   | LlavaOnevisionModelConfig;
 
 type Props = {
+  headerActions?: ReactNode;
   modelConfig: EncoderModelConfig;
 };
 
@@ -69,7 +69,7 @@ const DefaultCpuOnly = memo((props: { name: 'cpuOnly'; control: Control<EncoderM
 
 DefaultCpuOnly.displayName = 'DefaultCpuOnly';
 
-export const EncoderModelSettings = memo(({ modelConfig }: Props) => {
+export const EncoderModelSettings = memo(({ headerActions, modelConfig }: Props) => {
   const selectedModelKey = useAppSelector(selectSelectedModelKey);
   const { t } = useTranslation();
 
@@ -124,16 +124,19 @@ export const EncoderModelSettings = memo(({ modelConfig }: Props) => {
     <>
       <Flex gap="4" justifyContent="space-between" w="full" pb={4}>
         <Heading fontSize="md">{t('modelManager.settings')}</Heading>
-        <Button
-          size="sm"
-          leftIcon={<PiCheckBold />}
-          colorScheme="invokeYellow"
-          isDisabled={!formState.isDirty}
-          onClick={handleSubmit(onSubmit)}
-          isLoading={isLoadingUpdateModel}
-        >
-          {t('common.save')}
-        </Button>
+        <Flex gap={2} alignItems="center">
+          {headerActions}
+          <Button
+            size="sm"
+            leftIcon={<PiCheckBold />}
+            colorScheme="invokeYellow"
+            isDisabled={!formState.isDirty}
+            onClick={handleSubmit(onSubmit)}
+            isLoading={isLoadingUpdateModel}
+          >
+            {t('common.save')}
+          </Button>
+        </Flex>
       </Flex>
 
       <DefaultCpuOnly control={control} name="cpuOnly" />

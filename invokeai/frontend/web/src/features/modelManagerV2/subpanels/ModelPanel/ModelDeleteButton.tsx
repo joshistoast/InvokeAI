@@ -1,4 +1,12 @@
-import { Button, ConfirmationAlertDialog, Flex, IconButton, Text, useDisclosure } from '@invoke-ai/ui-library';
+import {
+  Button,
+  ConfirmationAlertDialog,
+  Flex,
+  IconButton,
+  MenuItem,
+  Text,
+  useDisclosure,
+} from '@invoke-ai/ui-library';
 import { logger } from 'app/logging/logger';
 import { useAppDispatch } from 'app/store/storeHooks';
 import { setSelectedModelKey } from 'features/modelManagerV2/store/modelManagerV2Slice';
@@ -11,10 +19,11 @@ import type { AnyModelConfig } from 'services/api/types';
 
 type Props = {
   showLabel?: boolean;
+  asMenuItem?: boolean;
   modelConfig: AnyModelConfig;
 };
 
-export const ModelDeleteButton = memo(({ showLabel = true, modelConfig }: Props) => {
+export const ModelDeleteButton = memo(({ showLabel = true, asMenuItem = false, modelConfig }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -54,7 +63,11 @@ export const ModelDeleteButton = memo(({ showLabel = true, modelConfig }: Props)
 
   return (
     <>
-      {showLabel ? (
+      {asMenuItem ? (
+        <MenuItem as="button" icon={<PiTrashSimpleBold />} onClick={onClickDeleteButton} color="error.300">
+          {t('modelManager.delete')}
+        </MenuItem>
+      ) : showLabel ? (
         <Button
           className="delete-button"
           size="sm"
